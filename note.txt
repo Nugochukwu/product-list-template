@@ -1,0 +1,111 @@
+Here’s a line-by-line breakdown of your JavaScript code for the cart system:
+
+🔄 document.addEventListener('DOMContentLoaded', () => { ... })
+This ensures all your HTML has loaded before the JavaScript runs. It's a safety measure so your script doesn’t try to access elements that haven’t been created yet.
+
+🛒 const cart = {};
+This initializes an empty object to hold cart items.
+Each item added will be stored as a key-value pair:
+
+js
+Copy code
+cart = {
+  "Waffle with Berries": { name: "Waffle with Berries", price: 6.5, quantity: 2 },
+  ...
+}
+🔍 const cartContainer = document.querySelector('.cart > div');
+Finds the cart container div in the HTML (inside <section class="cart">) so we can update its contents later.
+
+🔘 const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
+Selects all the “Add to Cart” buttons so we can listen for clicks on each one.
+
+📦 function updateCartUI() { ... }
+This function updates the visual display of the cart every time an item is added.
+
+Inside the function:
+let totalItems = 0; – running total of item quantities.
+
+let totalPrice = 0; – running total of item prices.
+
+let cartHTML = ''; – HTML string that will list the cart items.
+
+Then this loop:
+js
+Copy code
+for (let itemName in cart) {
+  const item = cart[itemName];
+  ...
+}
+Loops through each item in the cart and:
+
+Adds to the total quantity and price.
+
+Appends a visual line (cartHTML += ...) to show the item in the cart.
+
+Finally:
+js
+Copy code
+cartContainer.innerHTML = `
+  <div>Your Cart (${totalItems})</div>
+  <div>${cartHTML || 'No items in cart.'}</div>
+  <div>Order Total: $${totalPrice.toFixed(2)}</div>
+  ...
+`;
+Replaces the cart’s HTML with the updated content.
+
+🛍️ addToCartButtons.forEach(button => { ... })
+Loops through every "Add to Cart" button and listens for a click.
+
+Inside the event listener:
+js
+Copy code
+const itemDiv = button.closest('.item');
+Finds the .item container that the clicked button belongs to.
+
+js
+Copy code
+const nameEl = itemDiv.querySelector('h3') || itemDiv.querySelector('div:nth-of-type(2)');
+Finds the name of the product, either in <h3> or fallback in a <div>.
+
+js
+Copy code
+const priceEl = itemDiv.querySelector('h4');
+Finds the price element (<h4>$6.50</h4>).
+
+js
+Copy code
+const itemName = nameEl.textContent.trim();
+const itemPrice = parseFloat(priceEl.textContent.replace('$', ''));
+Extracts clean item name and price (as a number).
+
+Cart logic:
+js
+Copy code
+if (cart[itemName]) {
+  cart[itemName].quantity += 1;
+} else {
+  cart[itemName] = {
+    name: itemName,
+    price: itemPrice,
+    quantity: 1
+  };
+}
+If item already exists, increment quantity. If not, add it to the cart.
+
+🔁 updateCartUI(); // Initial UI setup
+Runs once when the page loads to show the cart is empty.
+
+Summary:
+This script:
+
+Waits for the DOM to load.
+
+Adds event listeners to all “Add to Cart” buttons.
+
+Extracts name and price from each item clicked.
+
+Updates a cart object.
+
+Re-renders the visual cart in real-time.
+
+Would you like me to add cart item removal or local storage nex
