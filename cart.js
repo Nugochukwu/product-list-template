@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cart = {};
   const cartContainer = document.querySelector('.cart-container');
   const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-
+  
   function updateCartUI() {
     let totalItems = 0;
     let totalPrice = 0;
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class = "item-quantity">${item.quantity}x </span>
               <span class = "item-quantititem-cart-totaly">@ $${item.price}</span>
               <span class = "item-cart-total">$${(item.quantity * item.price).toFixed(2)}</span>
-              <i class = "fas fa-times-circle"></i>
+              <Button class = "remove-from-cart"><i class = "fas fa-times-circle"></i></Button>
             </div>
           </div>
         </div>`;
@@ -73,6 +73,40 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCartUI();
     });
   });
+  
+  
+
+  cartContainer.addEventListener('click', (e) => {
+    if (e.target.closest('.remove-from-cart')) {
+      const cartItemDiv = e.target.closest('.cart-item');
+      const itemName = cartItemDiv.querySelector('.item-name span').textContent.trim();
+
+      delete cart[itemName];
+
+      // un-highlight item image
+      const productDiv = [...document.querySelectorAll('.item')].find(item => {
+        const nameEl = item.querySelector('.full-name') || item.querySelector('div:nth-of-type(2)');
+        return nameEl && nameEl.textContent.trim() === itemName;
+      });
+      
+
+      if (productDiv) {
+        const imageContainer = productDiv.querySelector('.image-container');
+        if (imageContainer) {
+          imageContainer.classList.remove('highlighted');
+        }
+
+        const addButton = productDiv.querySelector('.add-to-cart-button');
+        if (addButton) {
+          addButton.classList.remove('added');
+          addButton.innerHTML = `<i class="fas fa-shopping-cart"></i> Add to Cart`;
+        }
+      }
+
+      updateCartUI();
+    }
+  });
+
 
   document.querySelector('.list').addEventListener('click', (e) => {
     if (e.target.classList.contains('plus') || e.target.classList.contains('minus')) {
@@ -129,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCartUI();
     }
   });
-  
+
   document.addEventListener('click', (e) => {
   if (e.target && e.target.classList.contains('Confirm')) {
     const modal = document.getElementById('order-modal');
