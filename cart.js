@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const cart = {};
   const cartContainer = document.querySelector('.cart-container');
@@ -58,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         price: itemPrice,
         quantity: 0
       };
+      
       cart[itemName].quantity += 1;
       const imageContainer = itemDiv.querySelector('.image-container');
       if (imageContainer) {
